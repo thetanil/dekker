@@ -1,0 +1,5 @@
+- import_playbook: apt_base.yml
+- import_playbook: etc_hosts.yml
+- import_playbook: ssh_deploy_keys.yml
+- import_playbook: jdk_install.yml
+- import_playbook: hadoop.yml

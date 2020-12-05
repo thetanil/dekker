@@ -1,0 +1,60 @@
+# https://pimylifeup.com/jenkins-raspberry-pi/
+- name: install jdk
+  become: yes
+  apt:
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+    pkg:
+    - openjdk-11-jre
+
+- name: add the Jenkins repository key to our key chain
+  become: yes
+  changed_when: false
+  shell: 
+    warn: false
+    cmd: wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add -
+
+- name: create /etc/apt/sources.list.d/jenkins.list
+  become: yes
+  template:
+    src: jenkins.list.j2
+    dest: /etc/apt/sources.list.d/jenkins.list
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: install jenkins
+  become: yes
+  apt:
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+    pkg:
+    - jenkins
+
+- name: Remove useless packages from the cache
+  become: yes
+  apt:
+    update_cache: no
+    autoclean: yes
+
+- name: Enabling the Jenkins Service
+  become: yes
+  changed_when: false
+  shell: 
+    warn: false
+    cmd: sudo systemctl enable jenkins
+
+- name: Starting the Jenkins Service
+  become: yes
+  changed_when: false
+  shell: 
+    warn: false
+    cmd: sudo systemctl start jenkins
+
+# get http://192.168.178.52:8080/jnlpJars/agent.jar
+# wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/11+28/55eed80b163941c8885ad9298e6d786a/jdk-11_linux-x64_bin.tar.gz
+# wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://www.oracle.com/webapps/redirect/signon?nexturl=https://download.oracle.com/otn/java/jdk/11.0.9%2B7/eec35ebefb3f4133bd045b891f05db94/jdk-11.0.9_linux-aarch64_bin.deb

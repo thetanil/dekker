@@ -1,0 +1,81 @@
+- name: Add aliases to bashrc
+  blockinfile:
+    path: "~/.bashrc"
+    block: |
+      # some more ls aliases
+      alias ll='ls -alF'
+      alias la='ls -A'
+      alias l='ls -CF'
+
+      alias realias=". ~/.bashrc"
+      alias flush='dscacheutil -flushcache'
+
+      alias cls='clear'
+      alias h='history'
+      alias cdc='cd ~/code'
+      alias ..='cd ..'
+      alias ...='cd ../..'
+
+      # git
+      alias ga='git add .'
+      alias gs='git status'
+      alias gp='git push'
+      alias gca='git commit -v -a'
+      alias gl='git pull'
+      alias gb='git branch'
+      alias gco='git checkout'
+
+      # ansible
+      alias ans='ansible-playbook '
+      alias ansup='ansible-playbook pb.yml'
+
+      # cluster members
+      alias pi1='ssh pi1'
+      alias pi2='ssh pi2'
+      alias pi3='ssh pi3'
+      alias pi4='ssh pi4'
+    marker: "# {mark} ANSIBLE MANAGED BLOCK aliases"
+
+- name: install .gitconfig
+  blockinfile:
+    create: yes
+    path: "~/.gitconfig"
+    block: |
+      [push]
+        default = simple
+      [user]
+        name = User
+        email = user@example.com
+      [core]
+        autocrlf = false
+        eol = lf
+    marker: "# {mark} ANSIBLE MANAGED BLOCK gitconfig"
+
+# - name: remove motd
+#   become: yes
+#   file:
+#     state: absent
+#     path: /etc/motd
+
+# - name: install motd
+#   become: yes
+#   blockinfile:
+#     create: yes
+#     path: /etc/motd
+#     block: |
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK motd"
+
+- name: motd template
+  become: yes
+  template:
+    src: motd.j2
+    dest: /etc/motd
+
+- name: install .env
+  blockinfile:
+    create: yes
+    path: "~/.env"
+    block: |
+      set -o vi
+    marker: "# {mark} ANSIBLE MANAGED BLOCK .env"
+

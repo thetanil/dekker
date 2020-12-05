@@ -1,0 +1,16 @@
+# https://pimylifeup.com/jenkins-raspberry-pi/
+- name: install jdk
+  become: yes
+  apt:
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+    pkg:
+    - openjdk-11-jre
+
+- name: deploy jenkins pubkey
+  authorized_key:
+    user: pi
+    key: "{{ lookup('file', 'jenkins.pub') }}"
+    state: present
+

@@ -1,0 +1,154 @@
+# - name: apt install airflow deps
+#   become: yes
+#   apt:
+#     install_recommends: no
+#     state: latest
+#     update_cache: yes
+#     cache_valid_time: 3600
+#     pkg:
+#     - postgresql-client
+#     - postgresql-client-common
+#     - libatlas3-base
+#     - freetds-bin
+#     - krb5-user
+#     - ldap-utils
+#     - libffi6
+#     - libsasl2-2
+#     - libsasl2-modules
+#     - libssl1.1
+#     - locales 
+#     - lsb-release
+#     - sasl2-bin
+#     - sqlite3
+#     - unixodbc
+#     - python3
+#     - python3-pip
+    # - python3-numpy
+    # - python3-matplotlib
+
+# - name: apt install airflow deps
+#   become: yes
+#   apt:
+#     install_recommends: no
+#     state: absent
+#     update_cache: yes
+#     cache_valid_time: 3600
+#     pkg:
+#     - python3
+#     - python3-pip
+#     - python3-numpy
+#     - python3-matplotlib
+
+# - name: Remove useless packages from the cache
+#   become: yes
+#   apt:
+#     update_cache: no
+#     autoclean: yes
+
+# - name: pip install airflow
+#   pip:
+#     name: apache-airflow[postgres, hdfs]
+#     extra_args: --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-1.10.12/constraints-3.7.txt"
+
+# - name: Add airflow environment vars
+#   blockinfile:
+#     state: absent
+#     path: "~/.bashrc"
+#     block: |
+#       export AIRFLOW_HOME=~/airflow
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK airflow"
+
+# - name: AIRFLOW_HOME
+#   debug:
+#     msg: "'{{ lookup('env', 'AIRFLOW_HOME') }}' is the AIRFLOW_HOME"
+
+# - name: PATH
+#   debug:
+#     msg: "'{{ lookup('env', 'PATH') }}' is the PATH"
+
+# - name: init airflow db
+#   shell: /home/pi/.local/bin/airflow initdb
+#   changed_when: false
+
+# - name: install airflow env file
+#   blockinfile:
+#     path: "/home/pi/airflow/airflow.env"
+#     create: yes
+#     block: |
+#       # https://github.com/apache/airflow/blob/master/scripts/systemd/airflow
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK airflowenv"
+
+# - name: install systemd airflow-webserver-unit
+#   become: yes
+#   blockinfile:
+#     path: "/lib/systemd/system/airflow-webserver.service"
+#     create: yes
+#     block: |
+#       # https://github.com/apache/airflow/blob/master/scripts/systemd/airflow-webserver.service
+#       # gunicorn issue https://stackoverflow.com/questions/51352998/airflow-systemd-fails-due-to-gunicorn
+#       [Unit]
+#       Description=Airflow webserver daemon
+#       After=network.target postgresql.service mysql.service redis.service rabbitmq-server.service
+#       Wants=postgresql.service mysql.service redis.service rabbitmq-server.service
+
+#       [Service]
+#       Environment="PATH=/home/pi/.local/bin"
+#       Environment="AIRFLOW_CONFIG=/home/pi/airflow/airflow.cfg"
+#       Environment="AIRFLOW_HOME=/home/pi/airflow"
+#       User=pi
+#       Group=pi
+#       Type=simple
+#       ExecStart=/home/pi/.local/bin/airflow webserver --pid /home/pi/airflow/webserver.pid
+#       Restart=on-failure
+#       RestartSec=5s
+#       PrivateTmp=true
+
+#       [Install]
+#       WantedBy=multi-user.target
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK airflow-webserver-unit"
+
+# - name: enable service airflow-webserver
+#   systemd:
+#     name: airflow-webserver
+#     enabled: yes
+#     state: started
+
+# - name: install systemd airflow-webserver-unit
+#   become: yes
+#   blockinfile:
+#     path: "/lib/systemd/system/airflow-scheduler.service"
+#     create: yes
+#     block: |
+#       [Unit]
+#       Description=Airflow scheduler daemon
+#       After=network.target postgresql.service mysql.service redis.service rabbitmq-server.service
+#       Wants=postgresql.service mysql.service redis.service rabbitmq-server.service
+
+#       [Service]
+#       Environment="PATH=/home/pi/.local/bin"
+#       Environment="AIRFLOW_CONFIG=/home/pi/airflow/airflow.cfg"
+#       Environment="AIRFLOW_HOME=/home/pi/airflow"
+#       User=pi
+#       Group=pi
+#       Type=simple
+#       ExecStart=/home/pi/.local/bin/airflow scheduler
+#       Restart=always
+#       RestartSec=5s
+
+#       [Install]
+#       WantedBy=multi-user.target
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK airflow-webserver-unit"
+
+# - name: enable service airflow-webserver
+#   systemd:
+#     name: airflow-scheduler
+#     enabled: yes
+#     state: started
+
+
+
+# benchmark disks
+# postgres
+# startup
+# airflow initdb
+

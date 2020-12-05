@@ -1,0 +1,82 @@
+- name: disable radios in overlays config
+  become: yes
+  blockinfile:
+    path: "/boot/config.txt"
+    block: |
+      # disable radio
+      dtoverlay=disable-wifi
+      dtoverlay=disable-bt
+      # disable audio
+      dtparam=audio=off
+      # disable blinking when no sdcard
+      dtparam=sd_poll_once
+    marker: "# {mark} ANSIBLE MANAGED BLOCK disable_radios"
+
+- name: disable kernel modules for radios and audio
+  become: yes
+  blockinfile:
+    create: yes
+    path: "/etc/modprobe.d/ansible-blacklist.conf"
+    block: |
+      # WiFi
+      blacklist brcmfmac
+      blacklist brcmutil
+
+      # Bluetooth
+      blacklist btbcm
+      blacklist hci_uartt
+
+      # sound card
+      blacklist snd_bcm2835
+    marker: "# {mark} ANSIBLE MANAGED BLOCK disable_modules"
+
+- name: disable service wpa
+  become: yes
+  ignore_errors: yes
+  systemd:
+    name: wpa_supplicant
+    enabled: no
+    state: stopped
+
+- name: disable service bluetooth
+  become: yes
+  ignore_errors: yes
+  systemd:
+    name: bluetooth
+    enabled: no
+    state: stopped
+
+- name: disable service hciuart
+  become: yes
+  ignore_errors: yes
+  systemd:
+    name: hciuart
+    enabled: no
+    state: stopped
+
+- name: disable service avahi-daemon
+  become: yes
+  ignore_errors: yes
+  systemd:
+    name: avahi-daemon
+    enabled: no
+    state: stopped
+
+- name: disable service triggerhappy
+  become: yes
+  ignore_errors: yes
+  systemd:
+    name: triggerhappy
+    enabled: no
+    state: stopped
+
+- name: block bluetooth
+  become: yes
+  shell: rfkill block bluetooth
+  changed_when: no
+
+- name: block wlan
+  become: yes
+  shell: rfkill block wlan
+  changed_when: no
+

@@ -1,0 +1,46 @@
+- hosts: desktop
+  tasks:
+    - name: Install multiple packages
+      win_chocolatey:
+        name: '{{ item }}'
+        state: present
+      with_items:
+      - windirstat
+      - git
+      - everything
+      - doublecmd
+      - greenshot
+      - notepadplusplus.install
+      - 7zip
+      - vlc
+      - k-litecodecpackfull
+      - mobaxterm
+      - discord
+      - audacity
+      - audacity-lame
+      - markdownmonster
+      - dropbox
+      - autoruns
+      - sysinternals
+      - procexp
+      - curl
+      - wget
+      - putty
+      - cmder
+      - heroku-cli
+      - vscode
+      - python3
+      - nodejs
+      - hugo
+      - rufus
+      - winscp.install
+      - chromium
+      - firefox
+      - sqlitebrowser
+      - sass
+      - pandoc
+      - sqlite
+      - postgresql
+      - dbeaver
+      - pgadmin4
+

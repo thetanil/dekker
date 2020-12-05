@@ -1,0 +1,14 @@
+- name: create hadoop install dir
+  become: yes
+  file:
+    path: /opt/hadoop/    # TODO: change to variable
+    state: directory
+    #owner: www-data
+    #group: www-data
+    #mode: 0775
+
+- name: create hadoop hdfs dir
+  become: yes
+  file:
+    path: /opt/hadoop_hdfs/    # TODO: change to variable
+    state: directory

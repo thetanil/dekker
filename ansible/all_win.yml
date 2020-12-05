@@ -1,0 +1,8 @@
+all:
+  hosts:
+    desktop:
+      ansible_host: 192.168.178.38
+      ansible_user: user
+      ansible_password: poilkj09
+      ansible_connection: winrm
+      ansible_winrm_server_cert_validation: ignore

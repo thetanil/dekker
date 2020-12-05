@@ -1,0 +1,11 @@
+---
+
+- name: setup dotfiles
+  hosts: local
+  tasks:
+  - name: setup aliases
+    shell: echo $SHELL
+    register: default_shell
+    changed_when: no
+
+  - debug: msg="shell {{ default_shell.stdout }}"

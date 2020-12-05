@@ -1,0 +1,228 @@
+" Vundle
+set nocompatible
+filetype off " required! for Vundle
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" let Vundle manage Vundle required!
+" the magic that makes this work
+Plugin 'VundleVim/Vundle.vim'
+
+Plugin 'airblade/vim-gitgutter'
+"Plugin 'junegunn/fzf'
+"Plugin 'junegunn/fzf.vim'
+Plugin 'terryma/vim-multiple-cursors'
+Plugin 'tpope/vim-eunuch'
+
+" https://github.com/pangloss/vim-javascript
+" js indenting. also does syntax, but this config uses jshint from syntastic
+Plugin 'pangloss/vim-javascript'
+
+" https://vimawesome.com/plugin/markdown-syntax
+Plugin 'plasticboy/vim-markdown'
+
+" CSS stuff https://vimawesome.com/plugin/vim-css-color-the-story-of-us
+Plugin 'ap/vim-css-color'
+
+" https://github.com/mattn/emmet-vim/
+" zen coding
+" ctrl-y,
+Plugin 'mattn/emmet-vim'
+" just for CSS/HTML FTs
+let g:user_emmet_install_global = 0
+let g:user_emmet_leader_key=','
+autocmd FileType html,css EmmetInstall
+
+" https://github.com/tpope/vim-surround
+" https://vimawesome.com/plugin/surround-vim
+Plugin 'tpope/vim-surround'
+
+Plugin 'w0rp/ale'
+"let g:ale_fixers = {'javascript': ['prettier', 'eslint']}
+let g:ale_linters = {'javascript': ['eslint']}
+let g:ale_fixers = {'javascript': ['eslint']}
+let g:ale_fix_on_save = 1
+"let g:ale_set_loclist = 0
+"let g:ale_set_quickfix = 1
+
+Plugin 'itchyny/lightline.vim'
+"set showtabline=2
+set guioptions-=e
+" Always display the status line, even if only one window is displayed
+set laststatus=2
+" don't need the mode because it's in status line
+"set noshowmode
+
+Plugin 'maximbaz/lightline-ale'
+
+let g:lightline = {}
+
+let g:lightline.component_expand = {
+      \  'linter_checking': 'lightline#ale#checking',
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
+
+let g:lightline.component_type = {
+      \     'linter_checking': 'left',
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'left',
+      \ }
+
+let g:lightline.active = { 'right': [ 
+  \ [ 'lineinfo' ], 
+  \ [ 'percent' ], 
+  \ [ 'fileformat', 'fileencoding', 'filetype', 'charvaluehex' ], 
+  \ [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]
+  \ ] }
+let g:lightline.colorscheme = 'solarized'
+
+"Plugin 'valloric/youcompleteme'
+"disable shitty preview window since it never closes
+"set completeopt-=preview
+"let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
+
+" https://github.com/kien/ctrlp.vim
+" ctrl-p (ctrl-j ctrl-k to navigate quickfix)
+Plugin 'kien/ctrlp.vim'
+" ctags search ctags -R -f ./.git/tags .
+"nnoremap <leader>. :CtrlPTag<cr>
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+
+" https://github.com/scrooloose/nerdcommenter
+" <leader>cc and <leader>cu
+Plugin 'scrooloose/nerdcommenter'
+
+" https://github.com/scrooloose/nerdtree
+" double \ doesn't execute the command at the moment. this is a problem in
+" this rc file. seems to be fighting with easymotion
+Plugin 'scrooloose/nerdtree'
+" Set up command for NERDTree
+map <leader>\ :NERDTreeToggle<CR>
+let g:NERDTreeDirArrows=0
+" close vim if the only window left open is a NERDTree
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+
+
+""""""""""""""""""""""""""""
+" Color Bundles
+" Plugin 'adlawson/vim-sorcerer' bad bolding
+"Plugin 'jpo/vim-railscasts-theme'
+"Plugin 'vim-scripts/SlateDark'
+"Plugin 'vim-scripts/Liquid-Carbon'
+Plugin 'altercation/vim-colors-solarized'
+
+call vundle#end()
+
+filetype plugin indent on
+set encoding=utf-8
+
+syntax enable
+
+set background=dark
+"colorscheme solarized
+
+set visualbell
+set t_vb=
+
+set encoding=utf-8
+set autoindent
+set nostartofline
+set wildmenu
+set wildmode=list:full
+set list
+set listchars=trail:~,extends:>,precedes:<
+set showcmd
+set backspace=indent,eol,start
+set backup
+set backupdir=~/.vim/tmp/
+set writebackup
+set directory=~/.vim/tmp/
+set clipboard=autoselect,unnamed
+set cmdheight=2
+set confirm
+set cursorline
+set exrc
+set hidden
+set history=1000
+set hlsearch
+set ignorecase
+set makeprg=make\ -C\ build\ -j9
+" set mouse=a all modes
+" set mouse=v might be better?
+set mouse=r
+"set notimeout ttimeout ttimeoutlen=200
+set number
+set ruler
+set scrolloff=3   " Keep the next three lines viewable
+set secure
+set expandtab
+set shiftwidth=2
+set softtabstop=2
+set smartcase
+set tags+=~/.vim/tags/cpp
+set pastetoggle=<F7>
+
+au BufRead,BufNewFile *.json set filetype=json
+au BufRead,BufNewFile *.h,*.c set filetype=c.doxygen
+
+
+command! W :w
+
+"Apply highlighting automatically whenever text exceeds 80 columns
+":au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+hi colorcolumn ctermbg=NONE ctermfg=red
+set cc=80
+
+"" Useful mappings
+"" Map Y to act like D and C, i.e. to yank until EOL, rather than act as yy,
+"" which is the default
+map Y y$
+
+"folding settings
+set foldmethod=marker   "fold based on marker
+set nofoldenable        "dont fold by default
+
+if &diff
+  "I'm only interested in diff colours
+  syntax off
+endif
+
+"<home> toggles between start of line and start of text
+imap <khome> <home>
+nmap <khome> <home>
+inoremap <silent> <home> <C-O>:call Home()<CR>
+nnoremap <silent> <home> :call Home()<CR>
+function! Home()
+  let curcol = wincol()
+  normal ^
+  let newcol = wincol()
+  if newcol == curcol
+    normal 0
+  endif
+endfunction
+
+map <leader>V :source ~/.dotfiles/vim/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+map <leader>v :sp ~/.dotfiles/vim/.vimrc<CR>
+
+inoremap <F1> <Esc>:bp<CR>
+inoremap <F2> <Esc>:bn<CR>
+noremap <F1> :bp<CR>
+noremap <F2> :bn<CR>
+
+imap <F3> <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
+nmap <F3> a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
+
+map <F4> :execute "vimgrep /" . expand("<cword>") . "/j app/** config/** src/**" <Bar> cw<CR>
+
+map <S-F5> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+nnoremap <silent> <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
+nnoremap <F6> :make!<cr>
+map <F12> :!./go <CR>
+
+nnoremap <C-c> :bn\|bd#<CR>
+nnoremap <C-L> :nohl<CR><C-L>
+

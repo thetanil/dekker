@@ -1,0 +1,13 @@
+---
+- name: reboot server
+  become: yes
+  reboot:
+
+- name: wait for server status
+  wait_for:
+    port: 22
+    host: '{{ inventory_hostname }}'
+    search_regex: OpenSSH
+    delay: 10
+    timeout: 60
+  connection: local

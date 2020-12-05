@@ -1,0 +1,58 @@
+---
+# - hosts: pi
+#   roles:
+  # - apt_basic
+  # - common # relies on python from apt_basic
+  # - config_shell # relies on pip from common
+  # - ssh_keys
+  # - etc_hosts
+
+  # - airflow
+  # - ssh_keygen
+  # - hdfs
+  # - nginx
+  # - hugo
+  # - eventually vim
+  # - dropbox
+
+# - hosts: database
+#   roles:
+#   - postgres
+  
+- hosts: none # init rpi to be cluster member
+  roles:
+  - ssh_keys
+  - etc_hosts
+  - pi
+  - reboot # TODO: look into notify
+
+- hosts: none # all cluster members
+  vars:
+    go_version: 1.15.5
+    GOPATH: /home/pi/go
+    GOROOT: /usr/local/go
+    GOROOT_BOOTSTRAP: /home/pi/go1.4
+    build_go_from_source: yes
+    install_go_bootstrap: yes
+    go_reget: true
+    golang_shell_profile: ~/.bashrc
+  roles:
+  - etc_hosts
+  - ssh_keys
+  - pi
+  - apt_basic
+  - common # relies on python from apt_basic
+  - config_shell # relies on pip from common
+
+- hosts: pi2
+  roles:
+  - dev
+
+# - hosts: jenkins_master
+#   roles:
+#   - jenkins
+
+# - hosts: jenkins_agent
+#   roles:
+#   - jenkins_agent
+#   - golang

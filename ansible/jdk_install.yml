@@ -1,0 +1,30 @@
+- hosts: hadoop
+  vars:
+    java_home: /usr/lib/jvm/java-8-openjdk-armhf/jre
+  tasks:
+  - name: install jdk
+    become: yes
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+      name: openjdk-8-jdk
+      state: latest
+      install_recommends: no
+
+  - name: Adding the path in the bashrc files
+    become: yes
+    lineinfile:
+      dest: /etc/profile.d/jdk.sh
+      create: yes
+      line: 'export JAVA_HOME={{ java_home }}'
+      insertafter: 'EOF'
+      regexp: 'export JAVA_HOME={{ java_home }}'
+      state: present
+
+  - name: Source the bashrc file
+    become: no
+    shell: . $HOME/.profile && echo $JAVA_HOME
+    register: jhome
+    changed_when: false
+
+  - debug: msg="JAVA_HOME {{ jhome.stdout }}"

@@ -1,0 +1,6 @@
+ll
+cdd
+vim
+ls $CMDER_ROOT/config/user_profile.sh
+echo $CMDER_ROOT/config/user_profile.sh
+echo $CMDER_ROOT

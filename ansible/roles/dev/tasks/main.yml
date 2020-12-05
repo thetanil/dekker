@@ -1,0 +1,59 @@
+- name: git clone sites
+  vars:
+    gh_user: thetanil
+    repo_name: sites
+  git:
+    # git@github.com:thetanil/sites.git
+    repo: git@github.com:{{ gh_user }}/{{ repo_name }}.git
+    dest: /{{ ansible_env.HOME }}/code/{{ repo_name }}
+    separate_git_dir: /{{ ansible_env.HOME }}/{{ repo_name }}.git
+    clone: yes
+    update: yes
+    accept_hostkey: yes
+
+- name: git clone dekker
+  vars:
+    gh_user: thetanil
+    repo_name: dekker
+  git:
+    # git@github.com:thetanil/sites.git
+    repo: git@github.com:{{ gh_user }}/{{ repo_name }}.git
+    dest: /{{ ansible_env.HOME }}/code/{{ repo_name }}
+    separate_git_dir: /{{ ansible_env.HOME }}/{{ repo_name }}.git
+    clone: yes
+    update: yes
+    accept_hostkey: yes
+
+- name: git clone powerful-beach
+  vars:
+    gh_user: thetanil
+    repo_name: powerful-beach
+  git:
+    # git@github.com:thetanil/sites.git
+    repo: git@github.com:{{ gh_user }}/{{ repo_name }}.git
+    dest: /{{ ansible_env.HOME }}/code/{{ repo_name }}
+    separate_git_dir: /{{ ansible_env.HOME }}/{{ repo_name }}.git
+    clone: yes
+    update: yes
+    accept_hostkey: yes
+
+# - name: git clone dekker
+#   vars:
+#     gh_user: thetanil
+#     repo_name: dekker_config
+#   git:
+#     # git@github.com:thetanil/sites.git
+#     repo: git@github.com:{{ gh_user }}/{{ repo_name }}.git
+#     dest: /{{ ansible_env.HOME }}/code/{{ repo_name }}
+#     separate_git_dir: /{{ ansible_env.HOME }}/{{ repo_name }}.git
+#     clone: yes
+#     update: yes
+#     accept_hostkey: yes
+
+# - name: install heroku
+#   shell:
+#     cmd: curl https://cli-assets.heroku.com/install.sh | sh
+
+# - name: checkout heroku
+#   shell:
+#     cmd: heroku git:clone -a powerful-beach-53032

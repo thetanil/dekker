@@ -1,0 +1,29 @@
+# https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html
+# maybe this should be done another way, sharing the same key everywhere is not
+# ideal, but otherwise we have to manage all github repos with deploy keys and
+# those need to be for each deployment agent in jenkins which is an n^m problem.
+# this is easy to manage and in the case a change is made, we just deploy new
+# ones with this job and delete the old keys.
+# the 'right way' https://docs.github.com/en/free-pro-team@latest/developers/overview/managing-deploy-keys#deploy-keys
+
+- name: copy ssh priv key
+  copy:
+    src: id_ed25519
+    dest: /home/pi/.ssh/id_ed25519
+    owner: pi
+    group: pi
+    mode: '0600'
+
+- name: copy ssh pub key
+  copy:
+    src: id_ed25519.pub
+    dest: /home/pi/.ssh/id_ed25519.pub
+    owner: pi
+    group: pi
+    mode: '0644'
+
+- name: deploy pubkey
+  authorized_key:
+    user: pi
+    key: "{{ pubkey }}"
+    state: present

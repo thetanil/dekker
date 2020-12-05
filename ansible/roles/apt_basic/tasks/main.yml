@@ -1,0 +1,25 @@
+- name: install base packages
+  become: yes
+  apt:
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+    pkg:
+    - vim
+    - git
+    - build-essential
+    - sshpass
+    - python3
+    - python3-pip
+    - curl
+    - gcc
+    - findutils
+    - make
+    - rsync
+    - tar
+
+- name: Remove useless packages from the cache
+  become: yes
+  apt:
+    update_cache: no
+    autoclean: yes

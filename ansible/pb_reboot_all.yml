@@ -1,0 +1,24 @@
+---
+# - hosts: pi
+#   roles:
+  # - apt_basic
+  # - common # relies on python from apt_basic
+  # - config_shell # relies on pip from common
+  # - ssh_keys
+  # - etc_hosts
+
+  # - airflow
+  # - ssh_keygen
+  # - hdfs
+  # - nginx
+  # - hugo
+  # - eventually vim
+  # - dropbox
+
+# - hosts: database
+#   roles:
+#   - postgres
+  
+- hosts: pi2 # TODO: all but pi1
+  roles:
+  - reboot # TODO: look into notify
